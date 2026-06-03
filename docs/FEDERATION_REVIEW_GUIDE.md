@@ -20,17 +20,20 @@ CI also runs automated validation on any PR with the `federation` label (see [CI
 Steps 1–6 can be run with a single command from the agentic-collections repo root:
 
 ```bash
-# Full pack at repo root
-uv run python scripts/validate_federation.py <repo-url> <ref>
+# Full pack at repo root (default branch)
+uv run python scripts/validate_federation.py <repo-url>
+
+# At a specific ref
+uv run python scripts/validate_federation.py <repo-url> --ref <ref>
 
 # Pack in a subdirectory
-uv run python scripts/validate_federation.py <repo-url> <ref> --pack-path <path>
+uv run python scripts/validate_federation.py <repo-url> --pack-path <path>
 
 # Only specific skills
-uv run python scripts/validate_federation.py <repo-url> <ref> --skills <skill1> <skill2>
+uv run python scripts/validate_federation.py <repo-url> --skills <skill1> <skill2>
 
 # JSON output (for CI)
-uv run python scripts/validate_federation.py <repo-url> <ref> --json
+uv run python scripts/validate_federation.py <repo-url> --json
 ```
 
 The script checks: clone access, Lola structure, Tier 1, Tier 2, MCP version pinning, and gitleaks. If all pass, the pack is ready for manual review (steps 7–8).
@@ -42,7 +45,7 @@ The script checks: clone access, Lola structure, Tier 1, Tier 2, MCP version pin
 ### Step 1: Verify access and basic info
 
 - [ ] Repository URL is reachable and public
-- [ ] The ref (SHA or tag) exists: `git ls-remote <repo-url> <ref>`
+- [ ] If a specific ref (SHA or tag) is declared, it exists: `git ls-remote <repo-url> <ref>`
 - [ ] Owner/contact information is provided
 - [ ] License file exists in the repo and is compatible with Apache 2.0 (e.g., Apache-2.0, MIT, BSD-2-Clause, BSD-3-Clause)
 

@@ -41,7 +41,7 @@ Use this when a Federation Request issue has been opened and you need to evaluat
 2. **Action:** Read the issue using `gh issue view <number>`
 3. **Extract** from the issue:
    - Repository URL
-   - Ref (SHA or tag)
+   - Ref (SHA or tag, optional — defaults to default branch)
    - Pack name
    - License
    - AI agent compatibility
@@ -54,14 +54,17 @@ Use this when a Federation Request issue has been opened and you need to evaluat
 1. **Action:** Run the validation script:
 
 ```bash
-# Full pack validation
-uv run python scripts/validate_federation.py <repo-url> <ref>
+# Full pack validation (default branch)
+uv run python scripts/validate_federation.py <repo-url>
+
+# At a specific ref
+uv run python scripts/validate_federation.py <repo-url> --ref <ref>
 
 # If the pack is in a subdirectory
-uv run python scripts/validate_federation.py <repo-url> <ref> --pack-path <path>
+uv run python scripts/validate_federation.py <repo-url> --pack-path <path>
 
 # If only specific skills were requested
-uv run python scripts/validate_federation.py <repo-url> <ref> --skills <skill1> <skill2>
+uv run python scripts/validate_federation.py <repo-url> --skills <skill1> <skill2>
 ```
 
 2. **Output to user:** The full validation report with pass/fail for each check:

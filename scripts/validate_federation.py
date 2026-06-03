@@ -3,7 +3,7 @@
 Validate an external repository for federation into Red Hat Agentic Collections.
 
 Automates the mechanical checks from docs/FEDERATION_REVIEW_GUIDE.md:
-  1. Clone at pinned ref
+  1. Clone repository (at pinned ref if provided, default branch otherwise)
   2. Verify Lola pack structure
   3. Tier 1 validation (agentskills.io spec)
   4. Tier 2 validation (design principles)
@@ -11,18 +11,21 @@ Automates the mechanical checks from docs/FEDERATION_REVIEW_GUIDE.md:
   6. Credential leak scan (gitleaks)
 
 Usage:
-    python scripts/validate_federation.py <repo-url> <ref> [--pack-path <path>] [--skills skill1 skill2]
-    python scripts/validate_federation.py <repo-url> <ref> --json
+    python scripts/validate_federation.py <repo-url> [--ref <ref>] [--pack-path <path>] [--skills skill1 skill2]
+    python scripts/validate_federation.py <repo-url> --json
 
 Examples:
-    # Validate entire pack at repo root
-    python scripts/validate_federation.py https://github.com/org/repo v1.0.0
+    # Validate entire pack (default branch)
+    python scripts/validate_federation.py https://github.com/org/repo
+
+    # Validate at a specific ref
+    python scripts/validate_federation.py https://github.com/org/repo --ref v1.0.0
 
     # Pack lives in a subdirectory
-    python scripts/validate_federation.py https://github.com/org/repo v1.0.0 --pack-path my-pack
+    python scripts/validate_federation.py https://github.com/org/repo --pack-path my-pack
 
     # Validate only specific skills
-    python scripts/validate_federation.py https://github.com/org/repo abc123 --skills sdn-diagnostics ovn-trace
+    python scripts/validate_federation.py https://github.com/org/repo --skills sdn-diagnostics ovn-trace
 """
 
 from __future__ import annotations
@@ -61,19 +64,26 @@ class ValidationReport:
         return all(c.passed for c in self.checks)
 
 
-def clone_at_ref(repo_url: str, ref: str, dest: Path) -> CheckResult:
+def clone_at_ref(repo_url: str, ref: str | None, dest: Path) -> CheckResult:
     check = CheckResult(name="clone")
     try:
-        subprocess.run(
-            ["git", "clone", "--quiet", "--no-checkout", repo_url, str(dest)],
-            check=True, capture_output=True, text=True, timeout=120,
-        )
-        subprocess.run(
-            ["git", "checkout", "--quiet", ref],
-            check=True, capture_output=True, text=True, cwd=dest, timeout=30,
-        )
+        if ref:
+            subprocess.run(
+                ["git", "clone", "--quiet", "--no-checkout", repo_url, str(dest)],
+                check=True, capture_output=True, text=True, timeout=120,
+            )
+            subprocess.run(
+                ["git", "checkout", "--quiet", ref],
+                check=True, capture_output=True, text=True, cwd=dest, timeout=30,
+            )
+            check.details.append(f"Cloned and checked out {ref}")
+        else:
+            subprocess.run(
+                ["git", "clone", "--quiet", "--depth", "1", repo_url, str(dest)],
+                check=True, capture_output=True, text=True, timeout=120,
+            )
+            check.details.append("Cloned default branch")
         check.passed = True
-        check.details.append(f"Cloned and checked out {ref}")
     except subprocess.CalledProcessError as exc:
         check.passed = False
         check.details.append(exc.stderr.strip() or str(exc))
@@ -263,7 +273,7 @@ def print_report(report: ValidationReport) -> None:
     print("=" * 60)
     print("Federation Validation Report")
     print(f"  Repository: {report.repository}")
-    print(f"  Ref:        {report.ref}")
+    print(f"  Ref:        {report.ref or 'default branch'}")
     print("=" * 60)
 
     for c in report.checks:
@@ -296,7 +306,7 @@ def main() -> int:
         description="Validate an external repo for federation"
     )
     parser.add_argument("repo_url", help="Public repository URL")
-    parser.add_argument("ref", help="Commit SHA or release tag")
+    parser.add_argument("--ref", default=None, help="Commit SHA or release tag (default: default branch)")
     parser.add_argument("--pack-path", default=".", help="Path to the pack within the repo (default: repo root)")
     parser.add_argument("--skills", nargs="*", help="Validate only these skills (by directory name)")
     parser.add_argument("--json", action="store_true", help="Output as JSON")

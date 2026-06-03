@@ -95,7 +95,9 @@ jobs:
               name = mod.get('name', 'unknown')
 
               print(f'\n--- Validating: {name} ---')
-              cmd = [sys.executable, 'scripts/validate_federation.py', repo, ref, '--pack-path', pack_path, '--json']
+              cmd = [sys.executable, 'scripts/validate_federation.py', repo, '--pack-path', pack_path, '--json']
+              if ref:
+                  cmd.extend(['--ref', ref])
               if skills:
                   cmd.extend(['--skills'] + skills)
 
