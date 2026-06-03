@@ -105,6 +105,16 @@ modules:
       - "troubleshooting"
       - "execution"
 
+  - name: "cursor-sdk"
+    description: "Cursor SDK developer tools for building Apps, scripts, CI Pipelines and automations on top of the Cursor TypeScript SDK"
+    version: "1.0"
+    repository: "https://github.com/cursor/plugins"
+    path: "cursor-sdk"
+    tags:
+      - "cursor"
+      - "developer"
+      - "federation"
+
   # Federated modules — complete Lola packs hosted in external repositories.
   # Add them as regular module entries with a different repository URL.
   # The build identifies federated packs by comparing the repository field
