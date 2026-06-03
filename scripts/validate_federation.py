@@ -40,8 +40,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
 
-REQUIRED_FILES = ["CLAUDE.md", "README.md", "mcps.json"]
-REQUIRED_DIRS = ["skills"]
+LOLA_REQUIRED_FIELDS = ["name", "description", "version", "repository"]
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -93,27 +92,21 @@ def clone_at_ref(repo_url: str, ref: str | None, dest: Path) -> CheckResult:
     return check
 
 
-def check_lola_structure(pack_dir: Path) -> CheckResult:
+def check_lola_module_schema(module_meta: dict | None) -> CheckResult:
     check = CheckResult(name="lola_structure")
-    missing = []
-    for f in REQUIRED_FILES:
-        if not (pack_dir / f).exists():
-            missing.append(f)
-    for d in REQUIRED_DIRS:
-        if not (pack_dir / d).is_dir():
-            missing.append(f"{d}/")
+    if module_meta is None:
+        check.passed = True
+        check.skipped = True
+        check.details.append("No module metadata provided — skipped")
+        return check
 
-    skills = list((pack_dir / "skills").glob("*/SKILL.md")) if (pack_dir / "skills").is_dir() else []
-
+    missing = [f for f in LOLA_REQUIRED_FIELDS if not module_meta.get(f, "")]
     if missing:
         check.passed = False
-        check.details.append(f"Missing: {', '.join(missing)}")
-    elif not skills:
-        check.passed = False
-        check.details.append("No skills found in skills/")
+        check.details.append(f"Missing required Lola fields: {', '.join(missing)}")
     else:
         check.passed = True
-        check.details.append(f"Structure valid: {len(skills)} skill(s) found")
+        check.details.append(f"Module schema valid: {', '.join(LOLA_REQUIRED_FIELDS)} present")
     return check
 
 
@@ -310,6 +303,7 @@ def main() -> int:
     parser.add_argument("--pack-path", default=".", help="Path to the pack within the repo (default: repo root)")
     parser.add_argument("--skills", nargs="*", help="Validate only these skills (by directory name)")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
+    parser.add_argument("--module-json", default=None, help="Module entry from marketplace YAML as JSON (for Lola schema validation)")
     parser.add_argument("--keep-clone", action="store_true", help="Don't delete the cloned repo after validation")
     args = parser.parse_args()
 
@@ -329,8 +323,9 @@ def main() -> int:
 
         pack_dir = tmp / "repo" / args.pack_path
 
-        # Step 2: Lola structure
-        report.checks.append(check_lola_structure(pack_dir))
+        # Step 2: Lola module schema
+        module_meta = json.loads(args.module_json) if args.module_json else None
+        report.checks.append(check_lola_module_schema(module_meta))
 
         # Step 3: Tier 1
         report.checks.append(run_tier1(pack_dir, args.skills))

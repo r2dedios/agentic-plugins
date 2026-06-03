@@ -95,7 +95,8 @@ jobs:
               name = mod.get('name', 'unknown')
 
               print(f'\n--- Validating: {name} ---')
-              cmd = [sys.executable, 'scripts/validate_federation.py', repo, '--pack-path', pack_path, '--json']
+              cmd = [sys.executable, 'scripts/validate_federation.py', repo, '--pack-path', pack_path, '--json',
+                     '--module-json', json.dumps(mod)]
               if ref:
                   cmd.extend(['--ref', ref])
               if skills:
@@ -134,7 +135,7 @@ jobs:
 
             const checkLabels = {
               clone: { name: 'Clone & access', desc: 'Repository cloned at pinned ref' },
-              lola_structure: { name: 'Lola structure', desc: 'CLAUDE.md, README.md, mcps.json, skills/' },
+              lola_structure: { name: 'Lola module schema', desc: 'Required fields: name, description, version, repository' },
               tier1_agentskills: { name: 'Tier 1', desc: 'agentskills.io spec compliance' },
               tier2_design_principles: { name: 'Tier 2', desc: 'Design principles compliance' },
               mcp_version_pinning: { name: 'MCP pinning', desc: 'No `:latest` tags, no hardcoded credentials' },

@@ -69,7 +69,7 @@ uv run python scripts/validate_federation.py <repo-url> --skills <skill1> <skill
 
 2. **Output to user:** The full validation report with pass/fail for each check:
    - Clone and access
-   - Lola pack structure
+   - Lola module schema (name, description, version, repository)
    - Tier 1 (agentskills.io spec)
    - Tier 2 (design principles)
    - MCP version pinning

@@ -55,23 +55,16 @@ cd /tmp/federation-review
 git checkout <ref>
 ```
 
-### Step 2: Verify Lola pack structure
+### Step 2: Verify Lola module schema
 
-The pack must have the minimum structure for Lola installation:
+The module entry in `marketplace/rh-agentic-collection.yml` must have the required Lola fields:
 
-```
-<pack>/
-├── CLAUDE.md        # Required: persona, intent routing, rules
-├── README.md        # Required: description, prerequisites, installation
-├── mcps.json        # Required: MCP server configs (can be empty: {"mcpServers": {}})
-└── skills/          # Required: at least one skill
-    └── <skill>/
-        └── SKILL.md # Required: YAML frontmatter + implementation
-```
-
-```bash
-ls CLAUDE.md README.md mcps.json skills/*/SKILL.md
-```
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Module identifier |
+| `description` | Yes | Brief description |
+| `version` | Yes | Module version |
+| `repository` | Yes | Git URL to the external repo |
 
 If the request is for a **subset of skills** (not the full pack), verify only the listed skill paths exist.
 
@@ -164,7 +157,7 @@ rm -rf /tmp/federation-review
 |-------|----------|-----------|--------------|
 | Public access | Yes | Yes | `git ls-remote` |
 | License compatibility | Yes | No | Manual review |
-| Lola pack structure | Yes | Yes | `scripts/validate_federation.py` |
+| Lola module schema | Yes | Yes | `scripts/validate_federation.py` |
 | Tier 1 (agentskills.io) | Yes | Yes | `scripts/validate_federation.py` |
 | Tier 2 (design principles) | Yes | Yes | `scripts/validate_federation.py` |
 | MCP version pinning | Yes | Yes | `scripts/validate_federation.py` |
