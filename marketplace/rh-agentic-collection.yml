@@ -108,7 +108,7 @@ modules:
   - name: "rh-automation"
     description: "Ansible Automation Platform governance, execution safety, and forensic troubleshooting tools for Red Hat automation engineers."
     version: "0.1.0"
-    repository: "https://github.com/r2dedios/agentic-collections"
+    repository: "https://github.com/r2dedios/agentic-collections@cb3a71a916ecdaba8dc9002fc27a87f4a3c80153"
     path: "rh-automation"
     tags:
       - "ansible"
