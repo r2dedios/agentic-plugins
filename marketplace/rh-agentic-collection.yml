@@ -105,31 +105,6 @@ modules:
       - "troubleshooting"
       - "execution"
 
-  - name: "cursor-sdk"
-    description: "Cursor SDK developer tools for building Apps, scripts, CI Pipelines and automations on top of the Cursor TypeScript SDK"
-    version: "1.0"
-    repository: "https://github.com/cursor/plugins"
-    path: "cursor-sdk"
-    tags:
-      - "cursor"
-      - "developer"
-      - "federation"
-
-  - name: "rh-automation-2"
-    description: "Ansible Automation Platform governance, execution safety, and forensic troubleshooting tools for Red Hat automation engineers."
-    version: "0.1.1"
-    repository: "https://github.com/r2dedios/agentic-collections"
-    path: "rh-automation"
-    tags:
-      - "ansible"
-      - "federation"
-      - "aap"
-      - "automation"
-      - "red-hat"
-      - "governance"
-      - "troubleshooting"
-      - "execution"
-
   # Federated modules — complete Lola packs hosted in external repositories.
   # Add them as regular module entries with a different repository URL.
   # The build identifies federated packs by comparing the repository field

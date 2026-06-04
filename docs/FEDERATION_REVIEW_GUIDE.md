@@ -36,7 +36,7 @@ uv run python scripts/validate_federation.py <repo-url> --skills <skill1> <skill
 uv run python scripts/validate_federation.py <repo-url> --json
 ```
 
-The script checks: clone access, Lola structure, Tier 1, Tier 2, MCP version pinning, and gitleaks. If all pass, the pack is ready for manual review (steps 7–8).
+The script checks: clone access, Lola module schema, Tier 1, Tier 2, MCP version pinning, and gitleaks. If all pass, the pack is ready for manual review (steps 7–8).
 
 ---
 
@@ -108,7 +108,7 @@ grep -r ":latest" mcps.json && echo "FAIL: found :latest" || echo "PASS: no :lat
 - [ ] Destructive operations have human-in-the-loop confirmation
 
 ```bash
-gitleaks detect --source /tmp/federation-review --verbose
+gitleaks detect --source /tmp/federation-review --no-git --no-banner --verbose
 ```
 
 LLM-based security scan is triggered **on-demand** by a maintainer due to cost.
@@ -142,6 +142,25 @@ PRs with the `federation` label automatically trigger the **Federation Validatio
 3. Posts a summary comment on the PR with pass/fail results
 
 The label-based trigger ensures validation only runs on federation PRs, not on every marketplace YAML change.
+
+---
+
+## Verifying federation with Lola
+
+After merging a federation PR, verify the module is visible in the marketplace:
+
+```bash
+# Add the marketplace (use the raw YAML URL for a specific branch or main)
+lola market add test-federation https://raw.githubusercontent.com/RHEcosystemAppEng/agentic-collections/main/marketplace/rh-agentic-collection.yml
+
+# List modules — the federated pack should appear alongside internal packs
+lola market ls test-federation
+
+# Clean up when done
+lola market rm test-federation
+```
+
+To test a PR branch before merging, replace `main` with the branch name in the URL.
 
 ---
 

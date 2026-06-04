@@ -142,7 +142,7 @@ jobs:
             const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
 
             const checkLabels = {
-              clone: { name: 'Clone & access', desc: 'Repository cloned at pinned ref' },
+              clone: { name: 'Clone & access', desc: 'Repository cloned (pinned ref or default branch)' },
               lola_structure: { name: 'Lola module schema', desc: 'Required fields: name, description, version, repository' },
               tier1_agentskills: { name: 'Tier 1', desc: 'agentskills.io spec compliance' },
               tier2_design_principles: { name: 'Tier 2', desc: 'Design principles compliance' },

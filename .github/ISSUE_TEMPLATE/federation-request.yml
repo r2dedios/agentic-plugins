@@ -47,11 +47,11 @@ body:
   - type: input
     id: ref
     attributes:
-      label: Ref (commit SHA or release tag)
-      description: A stable ref — not a branch name. Use a full commit SHA or a release tag.
-      placeholder: v1.0.0 or a1b2c3d4e5f6...
+      label: Ref (commit SHA or release tag, optional)
+      description: A stable ref — not a branch name. Use a full commit SHA or a release tag. Leave empty to track the default branch.
+      placeholder: v1.0.0 or a1b2c3d4e5f6... (leave empty for default branch)
     validations:
-      required: true
+      required: false
 
   - type: input
     id: pack_name
@@ -142,5 +142,5 @@ body:
           required: true
         - label: The license is compatible with Apache 2.0
           required: true
-        - label: The ref provided is stable (commit SHA or release tag, not a branch)
-          required: true
+        - label: If a ref is provided, it is stable (commit SHA or release tag, not a branch)
+          required: false

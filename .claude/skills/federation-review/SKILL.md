@@ -120,14 +120,22 @@ modules:
     version: "<from repo>"
     license: "<from issue>"
     repository: "<repo-url>"
-    ref: "<ref>"
+    ref: "<ref>"              # optional: omit to track default branch
     path: "."
     tags: []
 ```
 
 2. **Action:** Create a branch, commit, and push
 3. **Action:** Create a PR with label `federation` linking to the original issue
-4. **Output to user:** PR URL
+4. **Action:** Verify the module is visible via Lola:
+
+```bash
+lola market add test-federation https://raw.githubusercontent.com/<owner>/<repo>/<branch>/marketplace/rh-agentic-collection.yml
+lola market ls test-federation
+lola market rm test-federation
+```
+
+5. **Output to user:** PR URL and Lola verification result
 
 ## Dependencies
 
