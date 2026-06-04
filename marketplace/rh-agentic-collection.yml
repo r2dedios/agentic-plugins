@@ -110,7 +110,7 @@ modules:
   # The build identifies federated packs by comparing the repository field
   # against this repo's URL. Extra fields (ref, license, skills) are
   # project extensions that Lola silently ignores.
-  # To request federation, open a GitHub issue using the "Federation Request" template.
+  # To request federation, open a PR adding the module entry with the "federation" label.
   #
   # Example:
   # - name: "partner-network-tools"

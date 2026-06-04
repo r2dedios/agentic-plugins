@@ -1,6 +1,6 @@
 # Federation Review Guide
 
-Step-by-step guide for maintainers evaluating a [Federation Request](https://github.com/RHEcosystemAppEng/agentic-collections/issues/new?template=federation-request.yml).
+Step-by-step guide for maintainers evaluating a federation PR.
 
 Federation means referencing an **external agentic pack** in our catalog. The code stays in the external repo — we don't copy or modify it. Users install federated packs directly from the external repo via Lola.
 
