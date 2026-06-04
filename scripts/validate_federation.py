@@ -244,7 +244,7 @@ def run_gitleaks(pack_dir: Path) -> CheckResult:
 
     try:
         result = subprocess.run(
-            ["gitleaks", "detect", "--source", str(pack_dir), "--no-git", "--quiet"],
+            ["gitleaks", "detect", "--source", str(pack_dir), "--no-git", "--no-banner", "--verbose"],
             capture_output=True, text=True, timeout=60,
         )
         if result.returncode == 0:
