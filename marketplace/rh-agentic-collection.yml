@@ -105,6 +105,21 @@ modules:
       - "troubleshooting"
       - "execution"
 
+  - name: "rh-automation"
+    description: "Ansible Automation Platform governance, execution safety, and forensic troubleshooting tools for Red Hat automation engineers."
+    version: "0.1.0"
+    repository: "https://github.com/r2dedios/agentic-collections"
+    path: "rh-automation"
+    tags:
+      - "ansible"
+      - "aap"
+      - "automation"
+      - "red-hat"
+      - "governance"
+      - "troubleshooting"
+      - "execution"
+      - "federation"
+
   # Federated modules — complete Lola packs hosted in external repositories.
   # Add them as regular module entries with a different repository URL.
   # The build identifies federated packs by comparing the repository field
